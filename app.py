@@ -188,7 +188,7 @@ st.markdown(
         font-style: italic !important;
     }}
 
-    /* Stat Medallions */
+    /* Stat Medallions: Authentic Parchment Tiles */
     .stat-badge {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -224,7 +224,7 @@ st.markdown(
         font-weight: 600 !important;
     }}
 
-    /* Vital Badges */
+    /* Vital Badges: Authentic Parchment Combat Bars */
     .vital-badge {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -248,7 +248,7 @@ st.markdown(
         font-family: 'Cinzel', serif !important;
     }}
 
-    /* Lore / Story Parchment Box */
+    /* Backstory, Flaws & Gear: Parchment Scrolls */
     .lore-parchment-box {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -454,35 +454,32 @@ if generate_btn:
             st.write("🌿 Aligning celestial ability scores and destiny...")
 
             text_response = None
-            models_to_try = ["gemini-3.8-flash", "gemini-3.1-pro-preview"]
             last_err = None
 
-            for model_name in models_to_try:
-                for attempt in range(2):
-                    try:
-                        text_response = client.models.generate_content(
-                            model=model_name,
-                            contents=(
-                                "Create a rich, flavorful level 1 D&D character"
-                                f" based on this prompt: {user_concept}"
-                            ),
-                            config={
-                                "response_mime_type": "application/json",
-                                "response_schema": DndCharacter,
-                            },
-                        )
-                        if text_response and text_response.text:
-                            break
-                    except Exception as e:
-                        last_err = e
-                        time.sleep(1.5)
-                if text_response and text_response.text:
-                    break
+            # Retry up to 3 times on the active Flash model with progressive backoff
+            for attempt in range(1, 4):
+                try:
+                    text_response = client.models.generate_content(
+                        model="gemini-3.8-flash",
+                        contents=(
+                            "Create a rich, flavorful level 1 D&D character"
+                            f" based on this prompt: {user_concept}"
+                        ),
+                        config={
+                            "response_mime_type": "application/json",
+                            "response_schema": DndCharacter,
+                        },
+                    )
+                    if text_response and text_response.text:
+                        break
+                except Exception as e:
+                    last_err = e
+                    time.sleep(attempt * 2)
 
             if not text_response or not text_response.text:
                 st.error(
-                    "ᛈ The Oracle was momentarily unreachable. Please try"
-                    f" awakening your adventurer once more. ({last_err})"
+                    "ᛈ The Oracle was momentarily unreachable. Please wait a"
+                    f" few moments and try awakening your adventurer once more. ({last_err})"
                 )
                 st.stop()
 
@@ -491,7 +488,7 @@ if generate_btn:
 
             st.write("🎨 Painting soul portrait...")
 
-            # Clean concise prompt with user-agent to ensure 100% reliable image delivery
+            # Clean concise prompt with user-agent to ensure reliable image delivery
             clean_desc = (
                 char.visual_description[:160]
                 if len(char.visual_description) > 160
