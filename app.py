@@ -406,8 +406,8 @@ if generate_btn:
 
             text_response = None
             models_to_try = [
+                "gemini-3.1-pro-preview",
                 "gemini-2.5-flash",
-                "gemini-2.5-pro",
             ]
             last_err = None
 
