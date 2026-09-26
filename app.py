@@ -408,7 +408,6 @@ if generate_btn:
             models_to_try = [
     "gemini-3.8-flash",
     "gemini-3.1-pro-preview",
-]
             ]
             last_err = None
 
