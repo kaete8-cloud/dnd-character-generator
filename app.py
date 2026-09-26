@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 import requests
 import streamlit as st
 
-# Safe import for dotenv: works both locally and on Streamlit Cloud
+# Safe import for dotenv
 try:
     from dotenv import load_dotenv
 
@@ -26,7 +26,7 @@ st.set_page_config(
 )
 
 
-# 2. Sylvan Forest Canopy & Theme Textures
+# 2. Textures & Styling
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as f:
@@ -52,7 +52,7 @@ st.markdown(
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
 
-    /* Forest Background across entire app */
+    /* Forest Background */
     html, body, [data-testid="stAppViewContainer"], .stApp {{
         background: linear-gradient(rgba(10, 25, 16, 0.55), rgba(4, 14, 8, 0.85)),
                     {bg_image_css} no-repeat center center fixed !important;
@@ -65,7 +65,7 @@ st.markdown(
         background: transparent !important;
     }}
 
-    /* Global Headings: Cinematic Antique Gold */
+    /* Global Headings */
     h1, h2, h3, h4, h5 {{
         font-family: 'Cinzel', serif !important;
         color: #f7e2a9 !important;
@@ -78,7 +78,7 @@ st.markdown(
         font-size: 1.15rem;
     }}
 
-    /* Sidebar: Frosted Forest Leather & Moss */
+    /* Sidebar: Forest Leather & Moss */
     section[data-testid="stSidebar"] {{
         background: rgba(14, 24, 16, 0.78) !important;
         backdrop-filter: blur(20px) !important;
@@ -106,7 +106,7 @@ st.markdown(
         letter-spacing: 0.03em;
     }}
 
-    /* Sidebar Preset Runic Buttons */
+    /* Preset Buttons */
     section[data-testid="stSidebar"] button[kind="secondary"] {{
         background: rgba(28, 20, 14, 0.65) !important;
         border: 1px solid rgba(212, 178, 111, 0.4) !important;
@@ -123,10 +123,9 @@ st.markdown(
         border-color: #f7e2a9 !important;
         color: #ffffff !important;
         transform: translateY(-1px) !important;
-        box-shadow: 0 6px 14px rgba(0,0,0,0.6), 0 0 10px rgba(223, 194, 130, 0.3) !important;
     }}
 
-    /* Text Input Area */
+    /* Prompt Text Area */
     section[data-testid="stSidebar"] textarea {{
         background: rgba(8, 18, 12, 0.85) !important;
         border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
@@ -141,7 +140,7 @@ st.markdown(
         font-style: italic !important;
     }}
 
-    /* Primary Awaken Button */
+    /* Primary Generator Button */
     button[kind="primary"] {{
         background: linear-gradient(180deg, #3d7d4e 0%, #1a4227 100%) !important;
         border: 1.5px solid #d4b26f !important;
@@ -163,32 +162,33 @@ st.markdown(
         transform: translateY(-2px);
     }}
 
-    /* Character Header Plaque */
-    .char-header-plaque {{
-        background: rgba(18, 28, 20, 0.75) !important;
-        backdrop-filter: blur(14px) !important;
-        -webkit-backdrop-filter: blur(14px) !important;
-        border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
+    /* Top Banner: Restored Authentic Parchment */
+    .parchment-header {{
+        background: {card_bg_css} !important;
+        background-size: cover !important;
+        border: 2px solid rgba(85, 45, 18, 0.7) !important;
         border-radius: 18px !important;
-        padding: 18px 28px !important;
+        padding: 22px 32px !important;
         margin-bottom: 22px !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.65), inset 0 0 40px rgba(60, 30, 10, 0.2) !important;
     }}
-    .char-header-plaque h1 {{
+    .parchment-header h1 {{
         margin: 0 !important;
-        font-size: 2.3rem !important;
-        color: #f7e2a9 !important;
-        border: none !important;
-        padding: 0 !important;
+        font-size: 2.5rem !important;
+        color: #241103 !important;
+        text-shadow: none !important;
+        letter-spacing: 0.04em;
     }}
-    .char-header-plaque p {{
+    .parchment-header p {{
         margin: 4px 0 0 0 !important;
-        color: #d8c29d !important;
-        font-size: 1.25rem !important;
+        color: #522d14 !important;
+        font-size: 1.3rem !important;
         font-style: italic !important;
+        font-weight: 600;
+        text-shadow: none !important;
     }}
 
-    /* Stat Medallions: Authentic Parchment Tiles */
+    /* Stat Medallions */
     .stat-badge {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -248,47 +248,34 @@ st.markdown(
         font-family: 'Cinzel', serif !important;
     }}
 
-    /* Backstory / Flaws / Gear: Parchment Scroll */
-    .lore-parchment-box {{
+    /* Parchment Card Scrolls (Backstory, Flaw, Gear) */
+    .lore-card {{
         background: {card_bg_css} !important;
         background-size: cover !important;
         border: 1.5px solid rgba(100, 60, 25, 0.55) !important;
         border-radius: 14px !important;
-        padding: 20px 24px !important;
+        padding: 18px 22px !important;
         color: #2e1708 !important;
-        font-size: 1.25rem !important;
-        line-height: 1.6 !important;
         box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 0 25px rgba(60, 30, 10, 0.15) !important;
-        margin-top: 10px;
+        height: 100%;
     }}
-
-    /* Custom Parchment Segmented Tabs */
-    div[data-testid="stSegmentedControl"] {{
-        background: rgba(10, 20, 14, 0.85) !important;
-        border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
-        border-radius: 14px !important;
-        padding: 4px !important;
-    }}
-    div[data-testid="stSegmentedControl"] button {{
-        background: transparent !important;
-        border: none !important;
-        border-radius: 10px !important;
-        padding: 8px 16px !important;
-    }}
-    div[data-testid="stSegmentedControl"] button p {{
+    .lore-card h4 {{
         font-family: 'Cinzel', serif !important;
-        font-size: 1.05rem !important;
-        color: #e5edd8 !important;
-        font-weight: 700 !important;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        font-size: 1.1rem !important;
+        color: #3b1d09 !important;
+        margin-top: 0 !important;
+        margin-bottom: 8px !important;
+        letter-spacing: 0.05em;
+        text-shadow: none !important;
+        border-bottom: 1px solid rgba(100, 60, 25, 0.25);
+        padding-bottom: 4px;
     }}
-    div[data-testid="stSegmentedControl"] button[aria-checked="true"] {{
-        background: rgba(85, 52, 24, 0.95) !important;
-        border: 1px solid #f7e2a9 !important;
-    }}
-    div[data-testid="stSegmentedControl"] button[aria-checked="true"] p {{
-        color: #ffd875 !important;
-        text-shadow: 0 0 10px rgba(255, 216, 117, 0.7) !important;
+    .lore-card p, .lore-card li {{
+        font-family: 'Cormorant Garamond', serif !important;
+        color: #2e1708 !important;
+        font-size: 1.18rem !important;
+        line-height: 1.55 !important;
+        margin-bottom: 4px;
     }}
 
     /* Portrait Image Frame */
@@ -296,15 +283,6 @@ st.markdown(
         border: 2px solid rgba(212, 178, 111, 0.5) !important;
         border-radius: 18px !important;
         box-shadow: 0 14px 35px rgba(0,0,0,0.8) !important;
-    }}
-
-    /* Centered Empty State Container */
-    .empty-state-wrapper {{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 40vh;
-        width: 100%;
     }}
     </style>
     """,
@@ -322,10 +300,7 @@ if not api_key:
     api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
-    st.error(
-        "🔑 GEMINI_API_KEY not found. Please add it to your .env file or"
-        " Streamlit secrets."
-    )
+    st.error("🔑 GEMINI_API_KEY not found. Please add it to your secrets.")
     st.stop()
 
 # Initialize Gemini client
@@ -486,19 +461,19 @@ if generate_btn:
             char: DndCharacter = text_response.parsed
             st.session_state["current_char"] = char
 
-            # High Fantasy Classic Hand-Painted Artwork Prompt
+            # Gritty hand-painted oil illustration prompt (avoiding modern photo looks)
             clean_desc = (
-                char.visual_description[:140]
-                if len(char.visual_description) > 140
+                char.visual_description[:130]
+                if len(char.visual_description) > 130
                 else char.visual_description
             )
             raw_prompt = (
-                f"masterpiece classic fantasy oil painting character portrait of {char.name},"
-                f" {char.race} {char.character_class}, {clean_desc}, dungeons and dragons artwork,"
-                " style of Todd Lockwood and Brom, dramatic rim lighting, canvas texture, dark fantasy, painterly, highly detailed brushwork"
+                f"masterpiece dungeons and dragons official handbook art, oil on canvas portrait of {char.name},"
+                f" {char.race} {char.character_class}, {clean_desc}, illustrated by Todd Lockwood, Larry Elmore, Brom, "
+                "heavy paint strokes, traditional fantasy, expressive face, dramatic atmospheric lighting, painterly texture"
             )
             encoded_prompt = urllib.parse.quote(raw_prompt)
-            image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=768&height=768&nologo=true&seed=88"
+            image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=768&height=768&nologo=true&seed=99"
 
             st.session_state["current_image"] = None
             for attempt in range(2):
@@ -521,10 +496,10 @@ if generate_btn:
 if "current_char" in st.session_state:
     char: DndCharacter = st.session_state["current_char"]
 
-    # Header Plaque
+    # Top Banner in Parchment
     st.markdown(
         f"""
-        <div class="char-header-plaque">
+        <div class="parchment-header">
             <h1>{char.name}</h1>
             <p>"{char.title}" &nbsp;•&nbsp; Level {char.level} {char.race} {char.character_class}</p>
         </div>
@@ -532,7 +507,7 @@ if "current_char" in st.session_state:
         unsafe_allow_html=True,
     )
 
-    # 2-Column Split: Portrait & Vitals (Left) | Stats & Lore (Right)
+    # 2-Column Split: Portrait & Vitals (Left) | Stats (Right)
     col_left, col_right = st.columns([4, 6], gap="large")
 
     with col_left:
@@ -630,68 +605,72 @@ if "current_char" in st.session_state:
                 unsafe_allow_html=True,
             )
 
+    # 3-Card Parchment Dossier
+    st.markdown(
+        "<div style='height: 20px;'></div>", unsafe_allow_html=True
+    )
+    c_lore, c_flaw, c_gear = st.columns([5, 4, 3], gap="medium")
+
+    with c_lore:
         st.markdown(
-            "<div style='height: 16px;'></div>", unsafe_allow_html=True
+            f"""
+            <div class="lore-card">
+                <h4>ᚨ Chronicled Lore</h4>
+                <p>{char.backstory_summary}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
-        # High-Contrast Visible Segmented Selection
-        active_tab = st.segmented_control(
-            "Archive Details",
-            options=["ᚨ Chronicled Lore", "ᛈ Secret & Flaw", "ᚠ Traveling Gear"],
-            default="ᚨ Chronicled Lore",
-            label_visibility="collapsed",
-        )
-
-        if active_tab == "ᚨ Chronicled Lore":
-            st.markdown(
-                "<div class='lore-parchment-box'>"
-                f"{char.backstory_summary}"
-                "</div>",
-                unsafe_allow_html=True,
-            )
-        elif active_tab == "ᛈ Secret & Flaw":
-            st.markdown(
-                "<div class='lore-parchment-box' style='color: #5a1414"
-                " !important; border-color: rgba(140, 40, 40, 0.6) !important;'>"
-                f"{char.secret_or_flaw}"
-                "</div>",
-                unsafe_allow_html=True,
-            )
-        elif active_tab == "ᚠ Traveling Gear":
-            gear_html = "".join([
-                f"<li style='margin-bottom: 6px; color: #2e1708;'><b>{item}</b></li>"
-                for item in char.equipment
-            ])
-            st.markdown(
-                "<div class='lore-parchment-box'><ul style='margin: 0;"
-                f" padding-left: 20px;'>{gear_html}</ul></div>",
-                unsafe_allow_html=True,
-            )
-
+    with c_flaw:
         st.markdown(
-            "<div style='height: 14px;'></div>", unsafe_allow_html=True
+            f"""
+            <div class="lore-card">
+                <h4 style="color: #6d1c1c !important;">ᛈ Secret & Flaw</h4>
+                <p style="color: #521919 !important; font-style: italic;">{char.secret_or_flaw}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-        st.download_button(
-            label="📥 Export Dossier (.json)",
-            data=char.model_dump_json(indent=2),
-            file_name=f"{char.name.lower().replace(' ', '_')}.json",
-            mime="application/json",
-            use_container_width=True,
+
+    with c_gear:
+        gear_list = "".join(
+            [f"<li><b>{item}</b></li>" for item in char.equipment]
         )
+        st.markdown(
+            f"""
+            <div class="lore-card">
+                <h4>ᚠ Traveling Gear</h4>
+                <ul style="padding-left: 20px; margin: 0;">{gear_list}</ul>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown(
+        "<div style='height: 18px;'></div>", unsafe_allow_html=True
+    )
+    st.download_button(
+        label="📥 Export Dossier (.json)",
+        data=char.model_dump_json(indent=2),
+        file_name=f"{char.name.lower().replace(' ', '_')}.json",
+        mime="application/json",
+        use_container_width=True,
+    )
 
 else:
-    # Empty State: Balanced & Centered in Viewport
-    st.markdown(
-        """
-        <div class="empty-state-wrapper">
-            <div class="char-header-plaque" style="text-align: center; max-width: 680px; width: 100%; padding: 42px 32px; margin: 0 auto;">
-                <div style="font-size: 1.8rem; color: #f7e2a9; margin-bottom: 12px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
-                <h2 style="font-size: 2.2rem; margin-bottom: 14px; font-weight: 700; color: #f7e2a9;">The Grove Awaits</h2>
-                <p style="font-size: 1.25rem; max-width: 520px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #d8c29d;">
+    # Centered Empty State
+    col_spacer_left, col_center, col_spacer_right = st.columns([1, 8, 1])
+    with col_center:
+        st.markdown(
+            """
+            <div class="parchment-header" style="text-align: center; padding: 48px 32px; margin-top: 40px;">
+                <div style="font-size: 2.0rem; color: #522d14; margin-bottom: 12px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
+                <h2 style="font-size: 2.4rem; margin-bottom: 14px; font-weight: 700; color: #241103;">The Grove Awaits</h2>
+                <p style="font-size: 1.3rem; max-width: 580px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #522d14;">
                     No hero or scoundrel has answered the call yet. Breathe a concept into the ancient archives on the left to forge your adventurer.
                 </p>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            unsafe_allow_html=True,
+        )
