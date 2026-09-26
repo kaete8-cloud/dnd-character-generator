@@ -26,7 +26,7 @@ st.set_page_config(
 )
 
 
-# 2. Sylvan Forest Canopy & Cohesive Sidebar Theme
+# 2. Sylvan Forest Canopy & Cohesive Theme
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as f:
@@ -66,7 +66,7 @@ st.markdown(
         background: transparent !important;
     }}
 
-    /* Global Headings: Scribed Gothic Tablet */
+    /* Global Headings */
     h1, h2, h3, h5 {{
         font-family: 'MedievalSharp', cursive, serif !important;
         color: #f7e2a9 !important;
@@ -155,7 +155,7 @@ st.markdown(
         box-shadow: 0 0 14px rgba(223, 194, 130, 0.4) !important;
     }}
 
-    /* Main "Awaken Adventurer" Button: Heavy Brass / Forest Rune Seal */
+    /* Main "Awaken Adventurer" Button */
     button[kind="primary"] {{
         background: linear-gradient(180deg, #3d7d4e 0%, #1a4227 100%) !important;
         border: 1.5px solid #d4b26f !important;
@@ -177,18 +177,16 @@ st.markdown(
         transform: translateY(-2px);
     }}
 
-    /* The Foreground Card: Authentic Parchment Manuscript */
+    /* The Foreground Card: Parchment Manuscript */
     .parchment-card {{
         background: {card_bg_css} !important;
         background-size: cover !important;
         border: 2px solid rgba(80, 50, 20, 0.45) !important;
         border-radius: 24px !important;
-        padding: 42px 36px !important;
+        padding: 30px !important;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 45px rgba(0, 0, 0, 0.35) !important;
         margin-bottom: 24px !important;
     }}
-
-    /* Ink-dark typography for text sitting directly on parchment */
     .parchment-card h1, .parchment-card h2, .parchment-card h3 {{
         color: #2e1708 !important;
         text-shadow: none !important;
@@ -202,59 +200,58 @@ st.markdown(
         text-shadow: none !important;
     }}
 
-    /* Stat Medallions (Opaque parchment tiles) */
-    .stat-badge {
+    /* Stat Medallions (Opaque Parchment) */
+    .stat-badge {{
         background: rgba(244, 232, 193, 0.92) !important;
         border: 1.5px solid rgba(110, 68, 30, 0.6) !important;
         border-radius: 16px !important;
         padding: 10px 4px !important;
         text-align: center !important;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
-    }
-    .stat-badge .label {
+    }}
+    .stat-badge .label {{
         font-family: 'MedievalSharp', cursive, serif !important;
         font-size: 0.85rem !important;
         color: #4a2810 !important;
         font-weight: 700 !important;
         letter-spacing: 0.05em;
-    }
-    .stat-badge .mod {
+    }}
+    .stat-badge .mod {{
         font-family: 'MedievalSharp', cursive, serif !important;
         font-size: 1.7rem !important;
         font-weight: 700 !important;
         color: #261103 !important;
         margin: 1px 0;
-    }
-    .stat-badge .score {
+    }}
+    .stat-badge .score {{
         font-size: 0.9rem !important;
         color: #633b19 !important;
         font-weight: 600 !important;
-    }
+    }}
 
-    /* Vital Badges (Opaque combat pill boxes) */
-    .vital-badge {
+    /* Vital Badges (Opaque Parchment) */
+    .vital-badge {{
         background: rgba(244, 232, 193, 0.92) !important;
         border: 1.5px solid rgba(110, 68, 30, 0.6) !important;
         border-radius: 16px !important;
         padding: 8px 4px !important;
         text-align: center !important;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
-    }
-    .vital-badge .title {
+    }}
+    .vital-badge .title {{
         font-size: 0.75rem !important;
         color: #4a2810 !important;
         font-family: 'MedievalSharp', cursive, serif !important;
         font-weight: 700 !important;
-    }
-    .vital-badge .val {
+    }}
+    .vital-badge .val {{
         font-size: 1.45rem !important;
         font-weight: 700 !important;
         color: #261103 !important;
         font-family: 'MedievalSharp', cursive, serif !important;
-    }
+    }}
 
-   
-    /* Tabs Styling */
+    /* Tab Headers */
     button[data-baseweb="tab"] p {{
         font-family: 'MedievalSharp', cursive, serif !important;
         font-size: 1.15rem !important;
@@ -411,10 +408,7 @@ if generate_btn:
             st.write("🌿 Aligning celestial ability scores and destiny...")
 
             text_response = None
-            models_to_try = [
-    "gemini-3.8-flash",
-    "gemini-3.1-pro-preview",
-            ]
+            models_to_try = ["gemini-3.8-flash", "gemini-3.1-pro-preview"]
             last_err = None
 
             for model_name in models_to_try:
@@ -482,15 +476,11 @@ if "current_char" in st.session_state:
     # Header Plaque
     st.markdown(
         f"""
-        <div class="parchment-card" style="padding: 24px 30px; margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h1 style="margin: 0; font-size: 2.4rem; text-align: left; border: none; padding: 0;">{char.name}</h1>
-                    <p style="margin: 6px 0 0 0; color: #422513; font-size: 1.3rem; font-style: italic; font-weight: 600;">
-                        "{char.title}" &nbsp;•&nbsp; Level {char.level} {char.race} {char.character_class}
-                    </p>
-                </div>
-            </div>
+        <div class="parchment-card" style="padding: 20px 28px; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 2.3rem; text-align: left; border: none; padding: 0;">{char.name}</h1>
+            <p style="margin: 4px 0 0 0; color: #422513; font-size: 1.25rem; font-style: italic; font-weight: 600;">
+                "{char.title}" &nbsp;•&nbsp; Level {char.level} {char.race} {char.character_class}
+            </p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -500,13 +490,11 @@ if "current_char" in st.session_state:
     col_left, col_right = st.columns([4, 6], gap="large")
 
     with col_left:
-        # Portrait
         if st.session_state.get("current_image"):
             st.image(st.session_state["current_image"], use_container_width=True)
         else:
             st.info("Portrait shrouded in forest mist.")
 
-        # Combat Vitals Bar
         st.markdown(
             "<div style='height: 12px;'></div>", unsafe_allow_html=True
         )
@@ -538,12 +526,12 @@ if "current_char" in st.session_state:
             )
 
     with col_right:
-        # Ability Score Medallion Grid (3x2)
         st.markdown(
-            "<h3 style='margin-top:0; font-size: 1.4rem;'>Ability"
-            " Attributes</h3>",
+            "<h3 style='margin-top:0; font-size: 1.4rem; color:"
+            " #f7e2a9;'>Ability Attributes</h3>",
             unsafe_allow_html=True,
         )
+
         s1, s2, s3 = st.columns(3)
         with s1:
             st.markdown(
@@ -596,7 +584,6 @@ if "current_char" in st.session_state:
                 unsafe_allow_html=True,
             )
 
-        # Tabbed Lore & Gear
         st.markdown(
             "<div style='height: 16px;'></div>", unsafe_allow_html=True
         )
@@ -607,15 +594,39 @@ if "current_char" in st.session_state:
         ])
 
         with tab_lore:
-            st.write(char.backstory_summary)
+            st.markdown(
+                "<div style='background: rgba(8, 18, 12, 0.82); border: 1.5px"
+                " solid rgba(212, 178, 111, 0.45); border-radius: 14px; padding:"
+                " 18px 22px; color: #f2f7ec; font-size: 1.25rem; line-height:"
+                f" 1.6;'>{char.backstory_summary}</div>",
+                unsafe_allow_html=True,
+            )
 
         with tab_flaw:
-            st.warning(char.secret_or_flaw)
+            st.markdown(
+                "<div style='background: rgba(35, 14, 14, 0.85); border: 1.5px"
+                " solid rgba(239, 68, 68, 0.5); border-radius: 14px; padding:"
+                " 18px 22px; color: #fee2e2; font-size: 1.25rem; line-height:"
+                f" 1.6;'>{char.secret_or_flaw}</div>",
+                unsafe_allow_html=True,
+            )
 
         with tab_gear:
-            for item in char.equipment:
-                st.markdown(f"- **{item}**")
+            gear_html = "".join([
+                f"<li style='margin-bottom: 6px;'><b>{item}</b></li>"
+                for item in char.equipment
+            ])
+            st.markdown(
+                "<div style='background: rgba(8, 18, 12, 0.82); border: 1.5px"
+                " solid rgba(212, 178, 111, 0.45); border-radius: 14px; padding:"
+                " 18px 24px; color: #f2f7ec; font-size: 1.2rem;'><ul"
+                f" style='margin: 0; padding-left: 20px;'>{gear_html}</ul></div>",
+                unsafe_allow_html=True,
+            )
 
+        st.markdown(
+            "<div style='height: 14px;'></div>", unsafe_allow_html=True
+        )
         st.download_button(
             label="📥 Export Dossier (.json)",
             data=char.model_dump_json(indent=2),
