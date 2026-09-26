@@ -51,7 +51,7 @@ else:
 st.markdown(
     f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=MedievalSharp&display=swap');
 
     /* Forest Background across all view containers */
     html, body, [data-testid="stAppViewContainer"], .stApp {{
@@ -59,24 +59,24 @@ st.markdown(
                     {bg_image_css} no-repeat center center fixed !important;
         background-size: cover !important;
         color: #f2f7ec !important;
-        font-family: 'Cormorant Garamond', serif !important;
+        font-family: 'IM Fell English', serif !important;
     }}
 
     header[data-testid="stHeader"], [data-testid="stToolbar"], .main {{
         background: transparent !important;
     }}
 
-    /* Global Headings */
-    h1, h2, h3 {{
-        font-family: 'Cinzel', serif !important;
+    /* Global Headings: Scribed Gothic Tablet */
+    h1, h2, h3, h5 {{
+        font-family: 'MedievalSharp', cursive, serif !important;
         color: #f7e2a9 !important;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.05em;
         text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(110, 168, 120, 0.4);
     }}
     
     p, span, label, div {{
-        font-family: 'Cormorant Garamond', serif !important;
-        font-size: 1.15rem;
+        font-family: 'IM Fell English', serif !important;
+        font-size: 1.2rem;
     }}
 
     /* Sidebar: Frosted Forest Leather & Moss */
@@ -89,8 +89,8 @@ st.markdown(
     section[data-testid="stSidebar"] h2, 
     section[data-testid="stSidebar"] h5 {{
         color: #f7e2a9 !important;
-        font-family: 'Cinzel', serif !important;
-        letter-spacing: 0.05em;
+        font-family: 'MedievalSharp', cursive, serif !important;
+        letter-spacing: 0.06em;
     }}
     
     /* Subtitles, Captions & Labels in Bright Warm Ivory */
@@ -106,10 +106,10 @@ st.markdown(
     section[data-testid="stSidebar"] label p,
     section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {{
         color: #f7e2a9 !important;
+        font-family: 'MedievalSharp', cursive, serif !important;
         font-size: 1.2rem !important;
-        font-weight: 600 !important;
         text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.03em;
     }}
 
     /* Inspiration Spark Buttons: Carved Wood & Warm Amber */
@@ -118,10 +118,10 @@ st.markdown(
         border: 1px solid rgba(212, 178, 111, 0.45) !important;
         border-radius: 12px !important;
         color: #f3ecd8 !important;
-        font-family: 'Cormorant Garamond', serif !important;
+        font-family: 'MedievalSharp', cursive, serif !important;
         font-size: 1.05rem !important;
-        font-weight: 600 !important;
         padding: 8px 10px !important;
+        letter-spacing: 0.04em !important;
         box-shadow: 0 4px 10px rgba(0,0,0,0.4) !important;
         transition: all 0.25s ease !important;
     }}
@@ -139,7 +139,7 @@ st.markdown(
         border: 1.5px solid rgba(212, 178, 111, 0.5) !important;
         border-radius: 16px !important;
         color: #ffffff !important;
-        font-family: 'Cormorant Garamond', serif !important;
+        font-family: 'IM Fell English', serif !important;
         font-size: 1.2rem !important;
         line-height: 1.5 !important;
         padding: 12px 14px !important;
@@ -161,10 +161,10 @@ st.markdown(
         border: 1.5px solid #d4b26f !important;
         border-radius: 24px !important;
         color: #fff9e6 !important;
-        font-family: 'Cinzel', serif !important;
+        font-family: 'MedievalSharp', cursive, serif !important;
         font-weight: 700 !important;
-        font-size: 0.95rem !important;
-        letter-spacing: 0.14em;
+        font-size: 1.05rem !important;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
         padding: 12px 24px !important;
         box-shadow: 0 8px 20px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.2) !important;
@@ -192,11 +192,13 @@ st.markdown(
     .parchment-card h1, .parchment-card h2, .parchment-card h3 {{
         color: #2e1708 !important;
         text-shadow: none !important;
-        font-family: 'Cinzel', serif !important;
+        font-family: 'MedievalSharp', cursive, serif !important;
     }}
     .parchment-card p, .parchment-card span {{
         color: #351c0d !important;
-        font-family: 'Cormorant Garamond', serif !important;
+        font-family: 'IM Fell English', serif !important;
+        font-size: 1.25rem !important;
+        line-height: 1.6 !important;
         text-shadow: none !important;
     }}
 
@@ -209,20 +211,20 @@ st.markdown(
         text-align: center !important;
     }}
     .stat-badge .label {{
-        font-family: 'Cinzel', serif !important;
-        font-size: 0.75rem !important;
+        font-family: 'MedievalSharp', cursive, serif !important;
+        font-size: 0.85rem !important;
         color: #573318 !important;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.06em;
     }}
     .stat-badge .mod {{
-        font-family: 'Cinzel', serif !important;
+        font-family: 'MedievalSharp', cursive, serif !important;
         font-size: 1.7rem !important;
         font-weight: 700 !important;
         color: #2b1406 !important;
         margin: 2px 0;
     }}
     .stat-badge .score {{
-        font-size: 0.85rem !important;
+        font-size: 0.95rem !important;
         color: #7a4a25 !important;
     }}
 
@@ -235,15 +237,21 @@ st.markdown(
         text-align: center !important;
     }}
     .vital-badge .title {{
-        font-size: 0.72rem !important;
+        font-size: 0.8rem !important;
         color: #573318 !important;
-        font-family: 'Cinzel', serif !important;
+        font-family: 'MedievalSharp', cursive, serif !important;
     }}
     .vital-badge .val {{
-        font-size: 1.45rem !important;
+        font-size: 1.5rem !important;
         font-weight: 700 !important;
         color: #2b1406 !important;
-        font-family: 'Cinzel', serif !important;
+        font-family: 'MedievalSharp', cursive, serif !important;
+    }}
+
+    /* Tabs Styling */
+    button[data-baseweb="tab"] p {{
+        font-family: 'MedievalSharp', cursive, serif !important;
+        font-size: 1.15rem !important;
     }}
 
     /* Portrait Frame */
@@ -399,8 +407,7 @@ if generate_btn:
             text_response = None
             models_to_try = [
                 "gemini-2.5-flash",
-                "gemini-2.0-flash",
-                "gemini-1.5-flash",
+                "gemini-2.5-pro",
             ]
             last_err = None
 
@@ -472,8 +479,8 @@ if "current_char" in st.session_state:
         <div class="parchment-card" style="padding: 24px 30px; margin-bottom: 24px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1 style="margin: 0; font-size: 2.2rem; text-align: left; border: none; padding: 0;">{char.name}</h1>
-                    <p style="margin: 6px 0 0 0; color: #422513; font-size: 1.25rem; font-style: italic; font-weight: 600;">
+                    <h1 style="margin: 0; font-size: 2.4rem; text-align: left; border: none; padding: 0;">{char.name}</h1>
+                    <p style="margin: 6px 0 0 0; color: #422513; font-size: 1.3rem; font-style: italic; font-weight: 600;">
                         "{char.title}" &nbsp;•&nbsp; Level {char.level} {char.race} {char.character_class}
                     </p>
                 </div>
@@ -527,7 +534,7 @@ if "current_char" in st.session_state:
     with col_right:
         # Ability Score Medallion Grid (3x2)
         st.markdown(
-            "<h3 style='margin-top:0; font-size: 1.3rem;'>Ability"
+            "<h3 style='margin-top:0; font-size: 1.4rem;'>Ability"
             " Attributes</h3>",
             unsafe_allow_html=True,
         )
@@ -617,8 +624,8 @@ else:
         """
         <div class="parchment-card" style="text-align: center; max-width: 680px; margin: 40px auto;">
             <div style="font-size: 1.8rem; color: #5a3517; margin-bottom: 8px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
-            <h2 style="font-size: 2rem; margin-bottom: 12px; font-weight: 700;">The Grove Awaits</h2>
-            <p style="font-size: 1.25rem; max-width: 480px; margin: 0 auto; line-height: 1.6; font-style: italic;">
+            <h2 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 700;">The Grove Awaits</h2>
+            <p style="font-size: 1.35rem; max-width: 500px; margin: 0 auto; line-height: 1.6; font-style: italic;">
                 No hero or scoundrel has answered the call yet. Breathe a concept into the ancient archives on the left to forge your adventurer.
             </p>
         </div>
