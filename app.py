@@ -26,7 +26,7 @@ st.set_page_config(
 )
 
 
-# 2. Sylvan Forest Canopy & Theme
+# 2. Sylvan Forest Canopy & Parchment Manuscript Theme
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as f:
@@ -35,16 +35,22 @@ def get_base64_image(image_path):
 
 
 bg_encoded = get_base64_image("forest_bg.png")
+parchment_encoded = get_base64_image("parchment.png")
 
 if bg_encoded:
     bg_image_css = f'url("data:image/png;base64,{bg_encoded}")'
 else:
     bg_image_css = 'url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2000&q=80")'
 
+if parchment_encoded:
+    card_bg_css = f'url("data:image/png;base64,{parchment_encoded}") no-repeat center center'
+else:
+    card_bg_css = 'radial-gradient(ellipse at center, #f5ebd0 0%, #decb9f 70%, #c4ab7c 100%)'
+
 st.markdown(
     f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
 
     /* Forest Background across all view containers */
     html, body, [data-testid="stAppViewContainer"], .stApp {{
@@ -59,7 +65,7 @@ st.markdown(
         background: transparent !important;
     }}
 
-    /* Global Headings: Cinematic Antique Gold */
+    /* Global Headings */
     h1, h2, h3, h4, h5 {{
         font-family: 'Cinzel', serif !important;
         color: #f7e2a9 !important;
@@ -100,7 +106,7 @@ st.markdown(
         letter-spacing: 0.03em;
     }}
 
-    /* Sidebar Inspiration Spark Buttons: Carved Wood & Amber */
+    /* Sidebar Runic Preset Buttons */
     section[data-testid="stSidebar"] button[kind="secondary"] {{
         background: rgba(28, 20, 14, 0.65) !important;
         border: 1px solid rgba(212, 178, 111, 0.4) !important;
@@ -117,10 +123,9 @@ st.markdown(
         border-color: #f7e2a9 !important;
         color: #ffffff !important;
         transform: translateY(-1px) !important;
-        box-shadow: 0 6px 14px rgba(0,0,0,0.6), 0 0 10px rgba(223, 194, 130, 0.3) !important;
     }}
 
-    /* Text Area: Deep Moss Hollow with Gold Trim */
+    /* Text Area */
     section[data-testid="stSidebar"] textarea {{
         background: rgba(8, 18, 12, 0.85) !important;
         border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
@@ -134,12 +139,8 @@ st.markdown(
         color: #b0ccb3 !important;
         font-style: italic !important;
     }}
-    section[data-testid="stSidebar"] textarea:focus {{
-        border-color: #f7e2a9 !important;
-        box-shadow: 0 0 14px rgba(223, 194, 130, 0.4) !important;
-    }}
 
-    /* Main "Awaken Adventurer" Button */
+    /* Primary Awaken Button */
     button[kind="primary"] {{
         background: linear-gradient(180deg, #3d7d4e 0%, #1a4227 100%) !important;
         border: 1.5px solid #d4b26f !important;
@@ -161,51 +162,47 @@ st.markdown(
         transform: translateY(-2px);
     }}
 
-    /* Character Header Plaque: Carved Dark Wood & Brass */
-    .char-header-plaque {{
-        background: rgba(18, 28, 20, 0.75) !important;
-        backdrop-filter: blur(14px) !important;
-        -webkit-backdrop-filter: blur(14px) !important;
-        border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
-        border-radius: 18px !important;
-        padding: 18px 28px !important;
-        margin-bottom: 22px !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
-    }}
-    .char-header-plaque h1 {{
-        margin: 0 !important;
-        font-size: 2.3rem !important;
-        color: #f7e2a9 !important;
-        border: none !important;
-        padding: 0 !important;
-    }}
-    .char-header-plaque p {{
-        margin: 4px 0 0 0 !important;
-        color: #d8c29d !important;
-        font-size: 1.25rem !important;
-        font-style: italic !important;
+    /* Parchment Card Container */
+    .parchment-card {{
+        background: {card_bg_css} !important;
+        background-size: cover !important;
+        border: 2.5px solid rgba(85, 45, 18, 0.65) !important;
+        border-radius: 20px !important;
+        padding: 32px 36px !important;
+        box-shadow: 0 22px 55px rgba(0, 0, 0, 0.85), inset 0 0 45px rgba(60, 30, 10, 0.28) !important;
+        margin-bottom: 24px !important;
     }}
 
-    /* Stat Medallions: Deep Sylvan Moss Glass with Warm Brass Glow */
-    .stat-badge {{
-        background: rgba(14, 26, 18, 0.68) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border: 1.5px solid rgba(212, 178, 111, 0.35) !important;
-        border-radius: 14px !important;
-        padding: 12px 6px !important;
-        text-align: center !important;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
-        transition: all 0.2s ease !important;
+    /* Dark Typography Sitting on Parchment */
+    .parchment-card h1, 
+    .parchment-card h2, 
+    .parchment-card h3 {{
+        color: #2b1406 !important;
+        text-shadow: none !important;
+        font-family: 'Cinzel', serif !important;
     }}
-    .stat-badge:hover {{
-        border-color: rgba(247, 226, 169, 0.7) !important;
-        transform: translateY(-2px) !important;
+    .parchment-card p, 
+    .parchment-card span {{
+        color: #351a08 !important;
+        text-shadow: none !important;
+        font-family: 'Cormorant Garamond', serif !important;
+        font-size: 1.25rem !important;
+        line-height: 1.6 !important;
+    }}
+
+    /* Stat Medallions (Engraved Wood / Leather on Parchment) */
+    .stat-badge {{
+        background: rgba(58, 30, 12, 0.12) !important;
+        border: 1.5px solid rgba(94, 52, 23, 0.4) !important;
+        border-radius: 14px !important;
+        padding: 10px 4px !important;
+        text-align: center !important;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1) !important;
     }}
     .stat-badge .label {{
         font-family: 'Cinzel', serif !important;
-        font-size: 0.8rem !important;
-        color: #d8c29d !important;
+        font-size: 0.75rem !important;
+        color: #5a3418 !important;
         letter-spacing: 0.08em;
         text-transform: uppercase;
     }}
@@ -213,36 +210,33 @@ st.markdown(
         font-family: 'Cinzel', serif !important;
         font-size: 1.85rem !important;
         font-weight: 700 !important;
-        color: #ffffff !important;
-        margin: 2px 0;
-        text-shadow: 0 0 10px rgba(247, 226, 169, 0.4);
+        color: #241103 !important;
+        margin: 1px 0;
     }}
     .stat-badge .score {{
-        font-size: 0.95rem !important;
-        color: #a8c4a4 !important;
+        font-size: 0.9rem !important;
+        color: #6a3e1e !important;
+        font-weight: 600;
     }}
 
     /* Vital Badges */
     .vital-badge {{
-        background: rgba(14, 26, 18, 0.72) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border: 1.5px solid rgba(212, 178, 111, 0.35) !important;
+        background: rgba(58, 30, 12, 0.15) !important;
+        border: 1.5px solid rgba(94, 52, 23, 0.45) !important;
         border-radius: 12px !important;
         padding: 8px 4px !important;
         text-align: center !important;
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5) !important;
     }}
     .vital-badge .title {{
-        font-size: 0.75rem !important;
-        color: #d8c29d !important;
+        font-size: 0.72rem !important;
+        color: #5a3418 !important;
         font-family: 'Cinzel', serif !important;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
     }}
     .vital-badge .val {{
         font-size: 1.5rem !important;
         font-weight: 700 !important;
-        color: #ffffff !important;
+        color: #241103 !important;
         font-family: 'Cinzel', serif !important;
     }}
 
@@ -250,14 +244,14 @@ st.markdown(
     button[data-baseweb="tab"] p {{
         font-family: 'Cinzel', serif !important;
         font-size: 1.1rem !important;
-        color: #d8c29d !important;
+        color: #3b1d09 !important;
     }}
 
     /* Portrait Frame */
     [data-testid="stImage"] img {{
-        border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
-        border-radius: 18px !important;
-        box-shadow: 0 14px 35px rgba(0,0,0,0.7) !important;
+        border: 2px solid rgba(85, 45, 18, 0.6) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 10px 24px rgba(0,0,0,0.5) !important;
     }}
     </style>
     """,
@@ -469,12 +463,16 @@ if generate_btn:
 if "current_char" in st.session_state:
     char: DndCharacter = st.session_state["current_char"]
 
-    # Header Plaque
+    # The Manuscript Scroll Container
     st.markdown(
         f"""
-        <div class="char-header-plaque">
-            <h1>{char.name}</h1>
-            <p>"{char.title}" &nbsp;•&nbsp; Level {char.level} {char.race} {char.character_class}</p>
+        <div class="parchment-card" style="padding: 24px 30px; margin-bottom: 20px;">
+            <div style="border-bottom: 1.5px solid rgba(94, 52, 23, 0.3); padding-bottom: 14px; margin-bottom: 20px;">
+                <h1 style="margin: 0; font-size: 2.4rem; letter-spacing: 0.04em;">{char.name}</h1>
+                <p style="margin: 4px 0 0 0; color: #573318; font-size: 1.3rem; font-style: italic; font-weight: 600;">
+                    "{char.title}" &nbsp;•&nbsp; Level {char.level} {char.race} {char.character_class}
+                </p>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -502,7 +500,7 @@ if "current_char" in st.session_state:
         with v2:
             st.markdown(
                 "<div class='vital-badge'><div class='title'>MAX HP</div><div"
-                f" class='val' style='color:#f87171;'>{char.max_hp}</div></div>",
+                f" class='val' style='color:#8b1e1e;'>{char.max_hp}</div></div>",
                 unsafe_allow_html=True,
             )
         with v3:
@@ -521,8 +519,8 @@ if "current_char" in st.session_state:
 
     with col_right:
         st.markdown(
-            "<h3 style='margin-top:0; font-size: 1.4rem; color:"
-            " #f7e2a9;'>Ability Attributes</h3>",
+            "<h3 style='margin-top:0; font-size: 1.4rem;'>Ability"
+            " Attributes</h3>",
             unsafe_allow_html=True,
         )
 
@@ -589,18 +587,18 @@ if "current_char" in st.session_state:
 
         with tab_lore:
             st.markdown(
-                "<div style='background: rgba(14, 26, 18, 0.72); border: 1.5px"
-                " solid rgba(212, 178, 111, 0.35); border-radius: 14px; padding:"
-                " 18px 22px; color: #f2f7ec; font-size: 1.25rem; line-height:"
+                "<div style='background: rgba(60, 32, 14, 0.08); border: 1px"
+                " solid rgba(94, 52, 23, 0.25); border-radius: 12px; padding:"
+                " 16px 20px; color: #2e1708; font-size: 1.25rem; line-height:"
                 f" 1.6;'>{char.backstory_summary}</div>",
                 unsafe_allow_html=True,
             )
 
         with tab_flaw:
             st.markdown(
-                "<div style='background: rgba(35, 14, 14, 0.75); border: 1.5px"
-                " solid rgba(239, 68, 68, 0.45); border-radius: 14px; padding:"
-                " 18px 22px; color: #fee2e2; font-size: 1.25rem; line-height:"
+                "<div style='background: rgba(140, 28, 28, 0.12); border: 1px"
+                " solid rgba(160, 40, 40, 0.35); border-radius: 12px; padding:"
+                " 16px 20px; color: #5a1414; font-size: 1.25rem; line-height:"
                 f" 1.6;'>{char.secret_or_flaw}</div>",
                 unsafe_allow_html=True,
             )
@@ -611,9 +609,9 @@ if "current_char" in st.session_state:
                 for item in char.equipment
             ])
             st.markdown(
-                "<div style='background: rgba(14, 26, 18, 0.72); border: 1.5px"
-                " solid rgba(212, 178, 111, 0.35); border-radius: 14px; padding:"
-                " 18px 24px; color: #f2f7ec; font-size: 1.2rem;'><ul"
+                "<div style='background: rgba(60, 32, 14, 0.08); border: 1px"
+                " solid rgba(94, 52, 23, 0.25); border-radius: 12px; padding:"
+                " 16px 20px; color: #2e1708; font-size: 1.2rem;'><ul"
                 f" style='margin: 0; padding-left: 20px;'>{gear_html}</ul></div>",
                 unsafe_allow_html=True,
             )
@@ -633,10 +631,10 @@ else:
     # Empty State: The Unwritten Manuscript
     st.markdown(
         """
-        <div class="char-header-plaque" style="text-align: center; max-width: 680px; margin: 40px auto; padding: 36px 28px;">
-            <div style="font-size: 1.8rem; color: #f7e2a9; margin-bottom: 8px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
-            <h2 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 700; color: #f7e2a9;">The Grove Awaits</h2>
-            <p style="font-size: 1.25rem; max-width: 500px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #d8c29d;">
+        <div class="parchment-card" style="text-align: center; max-width: 680px; margin: 40px auto; padding: 42px 32px;">
+            <div style="font-size: 1.8rem; color: #5a3418; margin-bottom: 8px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
+            <h2 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 700; color: #2b1406;">The Grove Awaits</h2>
+            <p style="font-size: 1.3rem; max-width: 500px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #573318;">
                 No hero or scoundrel has answered the call yet. Breathe a concept into the ancient archives on the left to forge your adventurer.
             </p>
         </div>
