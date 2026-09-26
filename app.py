@@ -68,7 +68,7 @@ st.markdown(
     /* Global Headings */
     h1, h2, h3, h4, h5 {{
         font-family: 'Cinzel', serif !important;
-        color: #f7e2a9 !important;
+        color: #f7e2a9;
         letter-spacing: 0.05em;
         text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 10px rgba(110, 168, 120, 0.4);
     }}
@@ -666,7 +666,7 @@ else:
             """
             <div class="parchment-header" style="text-align: center; padding: 48px 32px; margin-top: 40px;">
                 <div style="font-size: 2.0rem; color: #522d14; margin-bottom: 12px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
-                <h2 style="font-size: 2.4rem; margin-bottom: 14px; font-weight: 700; color: #241103;">The Grove Awaits</h2>
+                <h2 style="font-size: 2.4rem; margin-bottom: 14px; font-weight: 700; color: #241103 !important; text-shadow: none !important;">The Grove Awaits</h2>
                 <p style="font-size: 1.3rem; max-width: 580px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #522d14;">
                     No hero or scoundrel has answered the call yet. Breathe a concept into the ancient archives on the left to forge your adventurer.
                 </p>
