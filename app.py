@@ -261,11 +261,33 @@ st.markdown(
         box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 0 25px rgba(60, 30, 10, 0.15) !important;
     }}
 
-    /* Tab Headers */
+    /* Tab Headers: High Contrast Sylvan Tabs */
+    button[data-baseweb="tab"] {{
+        background: rgba(14, 26, 18, 0.72) !important;
+        border: 1px solid rgba(212, 178, 111, 0.35) !important;
+        border-radius: 10px 10px 0 0 !important;
+        padding: 8px 16px !important;
+        margin-right: 6px !important;
+    }}
     button[data-baseweb="tab"] p {{
         font-family: 'Cinzel', serif !important;
-        font-size: 1.1rem !important;
-        color: #d8c29d !important;
+        font-size: 1.15rem !important;
+        color: #dbead4 !important;
+        font-weight: 600 !important;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+    }}
+    button[data-baseweb="tab"][aria-selected="true"] {{
+        background: rgba(45, 28, 16, 0.85) !important;
+        border-color: #f7e2a9 !important;
+        border-bottom: 2px solid #f7e2a9 !important;
+    }}
+    button[data-baseweb="tab"][aria-selected="true"] p {{
+        color: #f7e2a9 !important;
+        font-weight: 700 !important;
+        text-shadow: 0 0 10px rgba(247, 226, 169, 0.6) !important;
+    }}
+    div[data-baseweb="tab-highlight"] {{
+        background-color: #f7e2a9 !important;
     }}
 
     /* Portrait Frame */
