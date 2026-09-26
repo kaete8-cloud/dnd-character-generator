@@ -202,52 +202,58 @@ st.markdown(
         text-shadow: none !important;
     }}
 
-    /* Stat Medallions */
-    .stat-badge {{
-        background: rgba(43, 24, 12, 0.12) !important;
-        border: 1.5px solid rgba(94, 52, 23, 0.35) !important;
-        border-radius: 20px !important;
-        padding: 12px 6px !important;
+    /* Stat Medallions (Opaque parchment tiles) */
+    .stat-badge {
+        background: rgba(244, 232, 193, 0.92) !important;
+        border: 1.5px solid rgba(110, 68, 30, 0.6) !important;
+        border-radius: 16px !important;
+        padding: 10px 4px !important;
         text-align: center !important;
-    }}
-    .stat-badge .label {{
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+    }
+    .stat-badge .label {
         font-family: 'MedievalSharp', cursive, serif !important;
         font-size: 0.85rem !important;
-        color: #573318 !important;
-        letter-spacing: 0.06em;
-    }}
-    .stat-badge .mod {{
+        color: #4a2810 !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em;
+    }
+    .stat-badge .mod {
         font-family: 'MedievalSharp', cursive, serif !important;
         font-size: 1.7rem !important;
         font-weight: 700 !important;
-        color: #2b1406 !important;
-        margin: 2px 0;
-    }}
-    .stat-badge .score {{
-        font-size: 0.95rem !important;
-        color: #7a4a25 !important;
-    }}
+        color: #261103 !important;
+        margin: 1px 0;
+    }
+    .stat-badge .score {
+        font-size: 0.9rem !important;
+        color: #633b19 !important;
+        font-weight: 600 !important;
+    }
 
-    /* Vital Badges */
-    .vital-badge {{
-        background: rgba(43, 24, 12, 0.15) !important;
-        border: 1.5px solid rgba(94, 52, 23, 0.4) !important;
-        border-radius: 18px !important;
+    /* Vital Badges (Opaque combat pill boxes) */
+    .vital-badge {
+        background: rgba(244, 232, 193, 0.92) !important;
+        border: 1.5px solid rgba(110, 68, 30, 0.6) !important;
+        border-radius: 16px !important;
         padding: 8px 4px !important;
         text-align: center !important;
-    }}
-    .vital-badge .title {{
-        font-size: 0.8rem !important;
-        color: #573318 !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+    }
+    .vital-badge .title {
+        font-size: 0.75rem !important;
+        color: #4a2810 !important;
         font-family: 'MedievalSharp', cursive, serif !important;
-    }}
-    .vital-badge .val {{
-        font-size: 1.5rem !important;
         font-weight: 700 !important;
-        color: #2b1406 !important;
+    }
+    .vital-badge .val {
+        font-size: 1.45rem !important;
+        font-weight: 700 !important;
+        color: #261103 !important;
         font-family: 'MedievalSharp', cursive, serif !important;
-    }}
+    }
 
+   
     /* Tabs Styling */
     button[data-baseweb="tab"] p {{
         font-family: 'MedievalSharp', cursive, serif !important;
