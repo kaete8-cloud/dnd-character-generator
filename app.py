@@ -163,7 +163,7 @@ st.markdown(
         transform: translateY(-2px);
     }}
 
-    /* Character Header Plaque: Carved Dark Wood & Brass */
+    /* Character Header Plaque */
     .char-header-plaque {{
         background: rgba(18, 28, 20, 0.75) !important;
         backdrop-filter: blur(14px) !important;
@@ -188,7 +188,7 @@ st.markdown(
         font-style: italic !important;
     }}
 
-    /* Stat Medallions: Authentic Parchment Tiles */
+    /* Stat Medallions */
     .stat-badge {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -224,7 +224,7 @@ st.markdown(
         font-weight: 600 !important;
     }}
 
-    /* Vital Badges: Authentic Parchment Combat Bars */
+    /* Vital Badges */
     .vital-badge {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -248,7 +248,7 @@ st.markdown(
         font-family: 'Cinzel', serif !important;
     }}
 
-    /* Backstory, Flaws & Gear: Parchment Scrolls */
+    /* Lore / Story Parchment Box */
     .lore-parchment-box {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -261,36 +261,49 @@ st.markdown(
         box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 0 25px rgba(60, 30, 10, 0.15) !important;
     }}
 
-    /* Tab Headers: High Contrast Sylvan Tabs */
-    button[data-baseweb="tab"] {{
-        background: rgba(14, 26, 18, 0.72) !important;
-        border: 1px solid rgba(212, 178, 111, 0.35) !important;
-        border-radius: 10px 10px 0 0 !important;
-        padding: 8px 16px !important;
-        margin-right: 6px !important;
-    }}
-    button[data-baseweb="tab"] p {{
-        font-family: 'Cinzel', serif !important;
-        font-size: 1.15rem !important;
-        color: #dbead4 !important;
-        font-weight: 600 !important;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
-    }}
-    button[data-baseweb="tab"][aria-selected="true"] {{
-        background: rgba(45, 28, 16, 0.85) !important;
-        border-color: #f7e2a9 !important;
-        border-bottom: 2px solid #f7e2a9 !important;
-    }}
-    button[data-baseweb="tab"][aria-selected="true"] p {{
-        color: #f7e2a9 !important;
-        font-weight: 700 !important;
-        text-shadow: 0 0 10px rgba(247, 226, 169, 0.6) !important;
-    }}
-    div[data-baseweb="tab-highlight"] {{
-        background-color: #f7e2a9 !important;
+    /* --- GUARANTEED TAB VISIBILITY OVERRIDES --- */
+    div[data-testid="stTabs"] [role="tablist"] {{
+        background: rgba(10, 20, 14, 0.95) !important;
+        border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
+        border-radius: 14px !important;
+        padding: 6px !important;
+        gap: 8px !important;
     }}
 
-    /* Portrait Frame */
+    div[data-testid="stTabs"] button[role="tab"] {{
+        background: rgba(28, 42, 30, 0.8) !important;
+        border: 1px solid rgba(212, 178, 111, 0.35) !important;
+        border-radius: 10px !important;
+        padding: 8px 18px !important;
+        opacity: 1 !important;
+    }}
+
+    div[data-testid="stTabs"] button[role="tab"] * {{
+        font-family: 'Cinzel', serif !important;
+        font-size: 1.05rem !important;
+        color: #f3ecd8 !important; /* Crisp Ivory for Inactive Tabs */
+        font-weight: 700 !important;
+        opacity: 1 !important;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.9) !important;
+    }}
+
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {{
+        background: rgba(85, 52, 24, 0.95) !important;
+        border-color: #f7e2a9 !important;
+    }}
+
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] * {{
+        color: #ffd875 !important; /* Luminous Gold for Active Tab */
+        font-weight: 800 !important;
+        text-shadow: 0 0 12px rgba(255, 216, 117, 0.7) !important;
+    }}
+
+    div[data-baseweb="tab-highlight"],
+    div[data-baseweb="tab-border"] {{
+        display: none !important; /* Hide red underline */
+    }}
+
+    /* Portrait Image Frame */
     [data-testid="stImage"] img {{
         border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
         border-radius: 18px !important;
@@ -477,24 +490,36 @@ if generate_btn:
             st.session_state["current_char"] = char
 
             st.write("🎨 Painting soul portrait...")
+
+            # Clean concise prompt with user-agent to ensure 100% reliable image delivery
+            clean_desc = (
+                char.visual_description[:160]
+                if len(char.visual_description) > 160
+                else char.visual_description
+            )
             raw_prompt = (
-                f"fantasy D&D portrait of {char.name}, {char.race}"
-                f" {char.character_class}, {char.visual_description}, highly"
-                " detailed digital oil painting, dark fantasy, sylvan forest"
+                f"fantasy D&D oil painting portrait of {char.name}, {char.race}"
+                f" {char.character_class}, {clean_desc}, sylvan dark fantasy"
             )
             encoded_prompt = urllib.parse.quote(raw_prompt)
             image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=768&height=768&nologo=true&seed=42"
 
-            try:
-                img_res = requests.get(image_url, timeout=30)
-                if img_res.status_code == 200:
-                    st.session_state["current_image"] = Image.open(
-                        io.BytesIO(img_res.content)
-                    )
-                else:
-                    st.session_state["current_image"] = None
-            except Exception:
-                st.session_state["current_image"] = None
+            st.session_state["current_image"] = None
+            for attempt in range(2):
+                try:
+                    headers = {
+                        "User-Agent": (
+                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                        )
+                    }
+                    img_res = requests.get(image_url, headers=headers, timeout=25)
+                    if img_res.status_code == 200 and len(img_res.content) > 1000:
+                        st.session_state["current_image"] = Image.open(
+                            io.BytesIO(img_res.content)
+                        )
+                        break
+                except Exception:
+                    time.sleep(1)
 
             status.update(
                 label="The adventurer steps into the clearing!",
