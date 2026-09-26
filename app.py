@@ -224,7 +224,7 @@ st.markdown(
         font-weight: 600 !important;
     }}
 
-    /* Vital Badges: Authentic Parchment Combat Bars */
+    /* Vital Badges */
     .vital-badge {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -248,66 +248,63 @@ st.markdown(
         font-family: 'Cinzel', serif !important;
     }}
 
-    /* Backstory, Flaws & Gear: Parchment Scrolls */
+    /* Backstory / Flaws / Gear: Parchment Scroll */
     .lore-parchment-box {{
         background: {card_bg_css} !important;
         background-size: cover !important;
         border: 1.5px solid rgba(100, 60, 25, 0.55) !important;
         border-radius: 14px !important;
-        padding: 18px 22px !important;
+        padding: 20px 24px !important;
         color: #2e1708 !important;
         font-size: 1.25rem !important;
         line-height: 1.6 !important;
         box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 0 25px rgba(60, 30, 10, 0.15) !important;
+        margin-top: 10px;
     }}
 
-    /* High-Contrast Tab Bar Container */
-    div[data-testid="stTabs"] [role="tablist"] {{
-        background: rgba(10, 20, 14, 0.95) !important;
+    /* Custom Parchment Segmented Tabs */
+    div[data-testid="stSegmentedControl"] {{
+        background: rgba(10, 20, 14, 0.85) !important;
         border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
         border-radius: 14px !important;
-        padding: 6px !important;
-        gap: 8px !important;
+        padding: 4px !important;
     }}
-
-    div[data-testid="stTabs"] button[role="tab"] {{
-        background: rgba(28, 42, 30, 0.8) !important;
-        border: 1px solid rgba(212, 178, 111, 0.35) !important;
+    div[data-testid="stSegmentedControl"] button {{
+        background: transparent !important;
+        border: none !important;
         border-radius: 10px !important;
-        padding: 8px 18px !important;
-        opacity: 1 !important;
+        padding: 8px 16px !important;
     }}
-
-    div[data-testid="stTabs"] button[role="tab"] * {{
+    div[data-testid="stSegmentedControl"] button p {{
         font-family: 'Cinzel', serif !important;
         font-size: 1.05rem !important;
-        color: #f3ecd8 !important; /* Crisp Ivory for Inactive Tabs */
+        color: #e5edd8 !important;
         font-weight: 700 !important;
-        opacity: 1 !important;
-        text-shadow: 0 1px 4px rgba(0,0,0,0.9) !important;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.8);
     }}
-
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {{
+    div[data-testid="stSegmentedControl"] button[aria-checked="true"] {{
         background: rgba(85, 52, 24, 0.95) !important;
-        border-color: #f7e2a9 !important;
+        border: 1px solid #f7e2a9 !important;
     }}
-
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] * {{
-        color: #ffd875 !important; /* Luminous Gold for Active Tab */
-        font-weight: 800 !important;
-        text-shadow: 0 0 12px rgba(255, 216, 117, 0.7) !important;
-    }}
-
-    div[data-baseweb="tab-highlight"],
-    div[data-baseweb="tab-border"] {{
-        display: none !important;
+    div[data-testid="stSegmentedControl"] button[aria-checked="true"] p {{
+        color: #ffd875 !important;
+        text-shadow: 0 0 10px rgba(255, 216, 117, 0.7) !important;
     }}
 
     /* Portrait Image Frame */
     [data-testid="stImage"] img {{
-        border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
+        border: 2px solid rgba(212, 178, 111, 0.5) !important;
         border-radius: 18px !important;
-        box-shadow: 0 14px 35px rgba(0,0,0,0.7) !important;
+        box-shadow: 0 14px 35px rgba(0,0,0,0.8) !important;
+    }}
+
+    /* Centered Empty State Container */
+    .empty-state-wrapper {{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 40vh;
+        width: 100%;
     }}
     </style>
     """,
@@ -448,11 +445,7 @@ if generate_btn:
     if not user_concept.strip():
         st.warning("Please breathe a concept into the grove first!")
     else:
-        with st.status(
-            "Conjuring adventurer from the weave...", expanded=True
-        ) as status:
-            st.write("🌿 Aligning celestial ability scores and destiny...")
-
+        with st.spinner("🌿 Awakening adventurer from the weave..."):
             text_response = None
             last_err = None
             candidate_models = [
@@ -493,20 +486,19 @@ if generate_btn:
             char: DndCharacter = text_response.parsed
             st.session_state["current_char"] = char
 
-            st.write("🎨 Painting soul portrait...")
-
-            # Clean concise prompt with user-agent to ensure reliable image delivery
+            # High Fantasy Classic Hand-Painted Artwork Prompt
             clean_desc = (
-                char.visual_description[:160]
-                if len(char.visual_description) > 160
+                char.visual_description[:140]
+                if len(char.visual_description) > 140
                 else char.visual_description
             )
             raw_prompt = (
-                f"fantasy D&D oil painting portrait of {char.name}, {char.race}"
-                f" {char.character_class}, {clean_desc}, sylvan dark fantasy"
+                f"masterpiece classic fantasy oil painting character portrait of {char.name},"
+                f" {char.race} {char.character_class}, {clean_desc}, dungeons and dragons artwork,"
+                " style of Todd Lockwood and Brom, dramatic rim lighting, canvas texture, dark fantasy, painterly, highly detailed brushwork"
             )
             encoded_prompt = urllib.parse.quote(raw_prompt)
-            image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=768&height=768&nologo=true&seed=42"
+            image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=768&height=768&nologo=true&seed=88"
 
             st.session_state["current_image"] = None
             for attempt in range(2):
@@ -524,12 +516,6 @@ if generate_btn:
                         break
                 except Exception:
                     time.sleep(1)
-
-            status.update(
-                label="The adventurer steps into the clearing!",
-                state="complete",
-                expanded=False,
-            )
 
 # 7. Main Dossier Layout
 if "current_char" in st.session_state:
@@ -647,21 +633,23 @@ if "current_char" in st.session_state:
         st.markdown(
             "<div style='height: 16px;'></div>", unsafe_allow_html=True
         )
-        tab_lore, tab_flaw, tab_gear = st.tabs([
-            "ᚨ Chronicled Lore",
-            "ᛈ Secret & Flaw",
-            "ᚠ Traveling Gear",
-        ])
 
-        with tab_lore:
+        # High-Contrast Visible Segmented Selection
+        active_tab = st.segmented_control(
+            "Archive Details",
+            options=["ᚨ Chronicled Lore", "ᛈ Secret & Flaw", "ᚠ Traveling Gear"],
+            default="ᚨ Chronicled Lore",
+            label_visibility="collapsed",
+        )
+
+        if active_tab == "ᚨ Chronicled Lore":
             st.markdown(
                 "<div class='lore-parchment-box'>"
                 f"{char.backstory_summary}"
                 "</div>",
                 unsafe_allow_html=True,
             )
-
-        with tab_flaw:
+        elif active_tab == "ᛈ Secret & Flaw":
             st.markdown(
                 "<div class='lore-parchment-box' style='color: #5a1414"
                 " !important; border-color: rgba(140, 40, 40, 0.6) !important;'>"
@@ -669,8 +657,7 @@ if "current_char" in st.session_state:
                 "</div>",
                 unsafe_allow_html=True,
             )
-
-        with tab_gear:
+        elif active_tab == "ᚠ Traveling Gear":
             gear_html = "".join([
                 f"<li style='margin-bottom: 6px; color: #2e1708;'><b>{item}</b></li>"
                 for item in char.equipment
@@ -693,15 +680,17 @@ if "current_char" in st.session_state:
         )
 
 else:
-    # Empty State: The Unwritten Manuscript
+    # Empty State: Balanced & Centered in Viewport
     st.markdown(
         """
-        <div class="char-header-plaque" style="text-align: center; max-width: 680px; margin: 40px auto; padding: 36px 28px;">
-            <div style="font-size: 1.8rem; color: #f7e2a9; margin-bottom: 8px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
-            <h2 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 700; color: #f7e2a9;">The Grove Awaits</h2>
-            <p style="font-size: 1.25rem; max-width: 500px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #d8c29d;">
-                No hero or scoundrel has answered the call yet. Breathe a concept into the ancient archives on the left to forge your adventurer.
-            </p>
+        <div class="empty-state-wrapper">
+            <div class="char-header-plaque" style="text-align: center; max-width: 680px; width: 100%; padding: 42px 32px; margin: 0 auto;">
+                <div style="font-size: 1.8rem; color: #f7e2a9; margin-bottom: 12px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
+                <h2 style="font-size: 2.2rem; margin-bottom: 14px; font-weight: 700; color: #f7e2a9;">The Grove Awaits</h2>
+                <p style="font-size: 1.25rem; max-width: 520px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #d8c29d;">
+                    No hero or scoundrel has answered the call yet. Breathe a concept into the ancient archives on the left to forge your adventurer.
+                </p>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
