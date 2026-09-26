@@ -162,7 +162,7 @@ st.markdown(
         transform: translateY(-2px);
     }}
 
-    /* Top Banner: Restored Authentic Parchment */
+    /* Top Banner & Empty State Card: Dark Ink on Parchment */
     .parchment-header {{
         background: {card_bg_css} !important;
         background-size: cover !important;
@@ -172,19 +172,22 @@ st.markdown(
         margin-bottom: 22px !important;
         box-shadow: 0 12px 35px rgba(0,0,0,0.65), inset 0 0 40px rgba(60, 30, 10, 0.2) !important;
     }}
-    .parchment-header h1 {{
+    .parchment-header h1,
+    .parchment-header h2,
+    .parchment-title {{
         margin: 0 !important;
-        font-size: 2.5rem !important;
         color: #241103 !important;
         text-shadow: none !important;
-        letter-spacing: 0.04em;
+        font-family: 'Cinzel', serif !important;
+        letter-spacing: 0.04em !important;
+        font-weight: 700 !important;
     }}
     .parchment-header p {{
         margin: 4px 0 0 0 !important;
         color: #522d14 !important;
         font-size: 1.3rem !important;
         font-style: italic !important;
-        font-weight: 600;
+        font-weight: 600 !important;
         text-shadow: none !important;
     }}
 
@@ -461,7 +464,7 @@ if generate_btn:
             char: DndCharacter = text_response.parsed
             st.session_state["current_char"] = char
 
-            # Gritty hand-painted oil illustration prompt (avoiding modern photo looks)
+            # Gritty hand-painted oil illustration prompt
             clean_desc = (
                 char.visual_description[:130]
                 if len(char.visual_description) > 130
@@ -500,7 +503,7 @@ if "current_char" in st.session_state:
     st.markdown(
         f"""
         <div class="parchment-header">
-            <h1>{char.name}</h1>
+            <div class="parchment-title" style="font-size: 2.5rem;">{char.name}</div>
             <p>"{char.title}" &nbsp;•&nbsp; Level {char.level} {char.race} {char.character_class}</p>
         </div>
         """,
@@ -591,7 +594,8 @@ if "current_char" in st.session_state:
             )
         with s5:
             st.markdown(
-                "<div class='stat-badge'><div class='label'>Wisdom</div><div"
+                "<div class='stat-badge'><div"
+                " class='label'>Wisdom</div><div"
                 f" class='mod'>{char.stats.wis_mod}</div><div"
                 f" class='score'>Score: {char.stats.wisdom}</div></div>",
                 unsafe_allow_html=True,
@@ -666,8 +670,8 @@ else:
             """
             <div class="parchment-header" style="text-align: center; padding: 48px 32px; margin-top: 40px;">
                 <div style="font-size: 2.0rem; color: #522d14; margin-bottom: 12px; letter-spacing: 0.35em;">ᛟ ᛉ ᛏ ᛈ ᚠ</div>
-                <h2 style="font-size: 2.4rem; margin-bottom: 14px; font-weight: 700; color: #241103 !important; text-shadow: none !important;">The Grove Awaits</h2>
-                <p style="font-size: 1.3rem; max-width: 580px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #522d14;">
+                <div class="parchment-title" style="font-size: 2.4rem; margin-bottom: 14px; color: #241103 !important; text-shadow: none !important;">The Grove Awaits</div>
+                <p style="font-size: 1.3rem; max-width: 580px; margin: 0 auto; line-height: 1.6; font-style: italic; color: #522d14 !important; text-shadow: none !important;">
                     No hero or scoundrel has answered the call yet. Breathe a concept into the ancient archives on the left to forge your adventurer.
                 </p>
             </div>
