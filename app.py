@@ -1,13 +1,22 @@
 import base64
 import io
 import os
+import time
 import urllib.parse
-from dotenv import load_dotenv
-from google import genai
 from PIL import Image
 from pydantic import BaseModel, Field
 import requests
 import streamlit as st
+
+# Safe import for dotenv: works both locally and on Streamlit Cloud
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass
+
+from google import genai
 
 # 1. Page Configuration
 st.set_page_config(
@@ -16,12 +25,14 @@ st.set_page_config(
     layout="wide",
 )
 
+
 # 2. Sylvan Forest Canopy & Cohesive Sidebar Theme
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as f:
             return base64.b64encode(f.read()).decode()
     return None
+
 
 # Load background and parchment textures
 bg_encoded = get_base64_image("forest_bg.png")
@@ -81,9 +92,24 @@ st.markdown(
         font-family: 'Cinzel', serif !important;
         letter-spacing: 0.05em;
     }}
-    section[data-testid="stSidebar"] .stCaption {{
-        color: #c4d7be !important;
-        font-style: italic;
+    
+    /* Subtitles, Captions & Labels in Bright Warm Ivory */
+    section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] p,
+    section[data-testid="stSidebar"] .stCaption,
+    section[data-testid="stSidebar"] small {{
+        color: #dbead4 !important;
+        font-size: 1.05rem !important;
+        font-style: italic !important;
+        opacity: 0.95 !important;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+    }}
+    section[data-testid="stSidebar"] label p,
+    section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {{
+        color: #f7e2a9 !important;
+        font-size: 1.2rem !important;
+        font-weight: 600 !important;
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9) !important;
+        letter-spacing: 0.02em;
     }}
 
     /* Inspiration Spark Buttons: Carved Wood & Warm Amber */
@@ -109,14 +135,20 @@ st.markdown(
 
     /* Text Area: Deep Moss Hollow with Gold Trim */
     section[data-testid="stSidebar"] textarea {{
-        background: rgba(8, 18, 12, 0.75) !important;
-        border: 1.5px solid rgba(212, 178, 111, 0.35) !important;
+        background: rgba(8, 18, 12, 0.85) !important;
+        border: 1.5px solid rgba(212, 178, 111, 0.5) !important;
         border-radius: 16px !important;
-        color: #fbfbf9 !important;
+        color: #ffffff !important;
         font-family: 'Cormorant Garamond', serif !important;
-        font-size: 1.15rem !important;
+        font-size: 1.2rem !important;
+        line-height: 1.5 !important;
         padding: 12px 14px !important;
-        box-shadow: inset 0 3px 8px rgba(0,0,0,0.6) !important;
+        box-shadow: inset 0 3px 8px rgba(0,0,0,0.7) !important;
+    }}
+    section[data-testid="stSidebar"] textarea::placeholder {{
+        color: #b0ccb3 !important;
+        opacity: 0.85 !important;
+        font-style: italic !important;
     }}
     section[data-testid="stSidebar"] textarea:focus {{
         border-color: #f7e2a9 !important;
@@ -156,7 +188,7 @@ st.markdown(
         margin-bottom: 24px !important;
     }}
 
-    /* Ink-dark typography for text sitting directly on the parchment */
+    /* Ink-dark typography for text sitting directly on parchment */
     .parchment-card h1, .parchment-card h2, .parchment-card h3 {{
         color: #2e1708 !important;
         text-shadow: none !important;
@@ -168,7 +200,7 @@ st.markdown(
         text-shadow: none !important;
     }}
 
-    /* Stat Medallions (Carved wood/stone on parchment) */
+    /* Stat Medallions */
     .stat-badge {{
         background: rgba(43, 24, 12, 0.12) !important;
         border: 1.5px solid rgba(94, 52, 23, 0.35) !important;
@@ -225,10 +257,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Load local .env file
-load_dotenv()
-
-# Retrieve API key from Streamlit secrets or local .env
+# 3. Retrieve API Key
 api_key = None
 try:
     api_key = st.secrets.get("GEMINI_API_KEY")
@@ -239,11 +268,15 @@ if not api_key:
     api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
-    st.error("🔑 GEMINI_API_KEY not found. Please add it to your .env file or Streamlit secrets.")
+    st.error(
+        "🔑 GEMINI_API_KEY not found. Please add it to your .env file or"
+        " Streamlit secrets."
+    )
     st.stop()
 
 # Initialize the Gemini client
 client = genai.Client(api_key=api_key)
+
 
 # 4. Data Models
 class AbilityScores(BaseModel):
@@ -258,31 +291,58 @@ class AbilityScores(BaseModel):
         return f"{(score - 10) // 2:+d}"
 
     @property
-    def str_mod(self) -> str: return self.get_mod(self.strength)
+    def str_mod(self) -> str:
+        return self.get_mod(self.strength)
+
     @property
-    def dex_mod(self) -> str: return self.get_mod(self.dexterity)
+    def dex_mod(self) -> str:
+        return self.get_mod(self.dexterity)
+
     @property
-    def con_mod(self) -> str: return self.get_mod(self.constitution)
+    def con_mod(self) -> str:
+        return self.get_mod(self.constitution)
+
     @property
-    def int_mod(self) -> str: return self.get_mod(self.intelligence)
+    def int_mod(self) -> str:
+        return self.get_mod(self.intelligence)
+
     @property
-    def wis_mod(self) -> str: return self.get_mod(self.wisdom)
+    def wis_mod(self) -> str:
+        return self.get_mod(self.wisdom)
+
     @property
-    def cha_mod(self) -> str: return self.get_mod(self.charisma)
+    def cha_mod(self) -> str:
+        return self.get_mod(self.charisma)
+
 
 class DndCharacter(BaseModel):
     name: str = Field(description="Full character name")
-    title: str = Field(description="An evocative title or epithet, e.g. 'The Silent Whisper'")
+    title: str = Field(
+        description="An evocative title or epithet, e.g. 'The Silent Whisper'"
+    )
     race: str = Field(description="D&D race")
     character_class: str = Field(description="D&D class")
     level: int = Field(default=1)
     stats: AbilityScores
-    armor_class: int = Field(description="Sensible Level 1 AC based on class and dexterity")
-    max_hp: int = Field(description="Sensible Level 1 Max HP based on hit die and constitution")
-    equipment: list[str] = Field(description="List of starting equipment and signature items")
-    secret_or_flaw: str = Field(description="A memorable character flaw, quirk, or dangerous secret")
-    backstory_summary: str = Field(description="2-3 sentence atmospheric origin story")
-    visual_description: str = Field(description="Detailed physical portrait description for an artist")
+    armor_class: int = Field(
+        description="Sensible Level 1 AC based on class and dexterity"
+    )
+    max_hp: int = Field(
+        description="Sensible Level 1 Max HP based on hit die and constitution"
+    )
+    equipment: list[str] = Field(
+        description="List of starting equipment and signature items"
+    )
+    secret_or_flaw: str = Field(
+        description="A memorable character flaw, quirk, or dangerous secret"
+    )
+    backstory_summary: str = Field(
+        description="2-3 sentence atmospheric origin story"
+    )
+    visual_description: str = Field(
+        description="Detailed physical portrait description for an artist"
+    )
+
 
 # 5. Sidebar
 with st.sidebar:
@@ -322,29 +382,65 @@ with st.sidebar:
         placeholder="e.g. A paranoid warlock with a penchant for butter who believes his patron lives in the churn.",
         height=120,
     )
-    generate_btn = st.button("ᛗ AWAKEN ADVENTURER", type="primary", use_container_width=True)
+    generate_btn = st.button(
+        "ᛗ AWAKEN ADVENTURER", type="primary", use_container_width=True
+    )
+
 # 6. Generation Engine
 if generate_btn:
     if not user_concept.strip():
         st.warning("Please breathe a concept into the grove first!")
     else:
-        with st.status("Conjuring adventurer from the weave...", expanded=True) as status:
+        with st.status(
+            "Conjuring adventurer from the weave...", expanded=True
+        ) as status:
             st.write("🌿 Aligning celestial ability scores and destiny...")
-            text_response = client.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=f"Create a rich, flavorful level 1 D&D character based on this prompt: {user_concept}",
-                config={
-                    "response_mime_type": "application/json",
-                    "response_schema": DndCharacter,
-                },
-            )
+
+            text_response = None
+            models_to_try = [
+                "gemini-2.5-flash",
+                "gemini-2.0-flash",
+                "gemini-1.5-flash",
+            ]
+            last_err = None
+
+            for model_name in models_to_try:
+                for attempt in range(2):
+                    try:
+                        text_response = client.models.generate_content(
+                            model=model_name,
+                            contents=(
+                                "Create a rich, flavorful level 1 D&D character"
+                                f" based on this prompt: {user_concept}"
+                            ),
+                            config={
+                                "response_mime_type": "application/json",
+                                "response_schema": DndCharacter,
+                            },
+                        )
+                        if text_response and text_response.text:
+                            break
+                    except Exception as e:
+                        last_err = e
+                        time.sleep(1.5)
+                if text_response and text_response.text:
+                    break
+
+            if not text_response or not text_response.text:
+                st.error(
+                    "ᛈ The Oracle was momentarily unreachable. Please try"
+                    f" awakening your adventurer once more. ({last_err})"
+                )
+                st.stop()
+
             char: DndCharacter = text_response.parsed
             st.session_state["current_char"] = char
 
             st.write("🎨 Painting soul portrait...")
             raw_prompt = (
-                f"fantasy D&D portrait of {char.name}, {char.race} {char.character_class}, "
-                f"{char.visual_description}, highly detailed digital oil painting, dark fantasy, sylvan forest"
+                f"fantasy D&D portrait of {char.name}, {char.race}"
+                f" {char.character_class}, {char.visual_description}, highly"
+                " detailed digital oil painting, dark fantasy, sylvan forest"
             )
             encoded_prompt = urllib.parse.quote(raw_prompt)
             image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=768&height=768&nologo=true&seed=42"
@@ -352,13 +448,19 @@ if generate_btn:
             try:
                 img_res = requests.get(image_url, timeout=30)
                 if img_res.status_code == 200:
-                    st.session_state["current_image"] = Image.open(io.BytesIO(img_res.content))
+                    st.session_state["current_image"] = Image.open(
+                        io.BytesIO(img_res.content)
+                    )
                 else:
                     st.session_state["current_image"] = None
             except Exception:
                 st.session_state["current_image"] = None
 
-            status.update(label="The adventurer steps into the clearing!", state="complete", expanded=False)
+            status.update(
+                label="The adventurer steps into the clearing!",
+                state="complete",
+                expanded=False,
+            )
 
 # 7. Main Dossier Layout
 if "current_char" in st.session_state:
@@ -367,11 +469,11 @@ if "current_char" in st.session_state:
     # Header Plaque
     st.markdown(
         f"""
-        <div class="parchment-card" style="padding: 16px 24px; margin-bottom: 24px;">
+        <div class="parchment-card" style="padding: 24px 30px; margin-bottom: 24px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h1 style="margin: 0; font-size: 2.2rem; text-align: left; border: none; padding: 0;">{char.name}</h1>
-                    <p style="margin: 4px 0 0 0; color: #d6d3cb; font-size: 1.15rem; font-style: italic;">
+                    <p style="margin: 6px 0 0 0; color: #422513; font-size: 1.25rem; font-style: italic; font-weight: 600;">
                         "{char.title}" &nbsp;•&nbsp; Level {char.level} {char.race} {char.character_class}
                     </p>
                 </div>
@@ -392,44 +494,104 @@ if "current_char" in st.session_state:
             st.info("Portrait shrouded in forest mist.")
 
         # Combat Vitals Bar
-        st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+        st.markdown(
+            "<div style='height: 12px;'></div>", unsafe_allow_html=True
+        )
         v1, v2, v3, v4 = st.columns(4)
         with v1:
-            st.markdown(f"<div class='vital-badge'><div class='title'>ARMOR</div><div class='val'>{char.armor_class}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='vital-badge'><div class='title'>ARMOR</div><div"
+                f" class='val'>{char.armor_class}</div></div>",
+                unsafe_allow_html=True,
+            )
         with v2:
-            st.markdown(f"<div class='vital-badge'><div class='title'>MAX HP</div><div class='val' style='color:#f87171;'>{char.max_hp}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='vital-badge'><div class='title'>MAX HP</div><div"
+                f" class='val' style='color:#b91c1c;'>{char.max_hp}</div></div>",
+                unsafe_allow_html=True,
+            )
         with v3:
-            st.markdown(f"<div class='vital-badge'><div class='title'>INITIATIVE</div><div class='val'>{char.stats.dex_mod}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='vital-badge'><div"
+                " class='title'>INITIATIVE</div><div"
+                f" class='val'>{char.stats.dex_mod}</div></div>",
+                unsafe_allow_html=True,
+            )
         with v4:
-            st.markdown("<div class='vital-badge'><div class='title'>SPEED</div><div class='val'>30ft</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='vital-badge'><div class='title'>SPEED</div><div"
+                " class='val'>30ft</div></div>",
+                unsafe_allow_html=True,
+            )
 
     with col_right:
         # Ability Score Medallion Grid (3x2)
-        st.markdown("<h3 style='margin-top:0; font-size: 1.3rem;'>Ability Attributes</h3>", unsafe_allow_html=True)
+        st.markdown(
+            "<h3 style='margin-top:0; font-size: 1.3rem;'>Ability"
+            " Attributes</h3>",
+            unsafe_allow_html=True,
+        )
         s1, s2, s3 = st.columns(3)
         with s1:
-            st.markdown(f"<div class='stat-badge'><div class='label'>Strength</div><div class='mod'>{char.stats.str_mod}</div><div class='score'>Score: {char.stats.strength}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='stat-badge'><div"
+                " class='label'>Strength</div><div"
+                f" class='mod'>{char.stats.str_mod}</div><div"
+                f" class='score'>Score: {char.stats.strength}</div></div>",
+                unsafe_allow_html=True,
+            )
         with s2:
-            st.markdown(f"<div class='stat-badge'><div class='label'>Dexterity</div><div class='mod'>{char.stats.dex_mod}</div><div class='score'>Score: {char.stats.dexterity}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='stat-badge'><div"
+                " class='label'>Dexterity</div><div"
+                f" class='mod'>{char.stats.dex_mod}</div><div"
+                f" class='score'>Score: {char.stats.dexterity}</div></div>",
+                unsafe_allow_html=True,
+            )
         with s3:
-            st.markdown(f"<div class='stat-badge'><div class='label'>Constitution</div><div class='mod'>{char.stats.con_mod}</div><div class='score'>Score: {char.stats.constitution}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='stat-badge'><div"
+                " class='label'>Constitution</div><div"
+                f" class='mod'>{char.stats.con_mod}</div><div"
+                f" class='score'>Score: {char.stats.constitution}</div></div>",
+                unsafe_allow_html=True,
+            )
 
         st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
         s4, s5, s6 = st.columns(3)
         with s4:
-            st.markdown(f"<div class='stat-badge'><div class='label'>Intelligence</div><div class='mod'>{char.stats.int_mod}</div><div class='score'>Score: {char.stats.intelligence}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='stat-badge'><div"
+                " class='label'>Intelligence</div><div"
+                f" class='mod'>{char.stats.int_mod}</div><div"
+                f" class='score'>Score: {char.stats.intelligence}</div></div>",
+                unsafe_allow_html=True,
+            )
         with s5:
-            st.markdown(f"<div class='stat-badge'><div class='label'>Wisdom</div><div class='mod'>{char.stats.wis_mod}</div><div class='score'>Score: {char.stats.wisdom}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='stat-badge'><div class='label'>Wisdom</div><div"
+                f" class='mod'>{char.stats.wis_mod}</div><div"
+                f" class='score'>Score: {char.stats.wisdom}</div></div>",
+                unsafe_allow_html=True,
+            )
         with s6:
-            st.markdown(f"<div class='stat-badge'><div class='label'>Charisma</div><div class='mod'>{char.stats.cha_mod}</div><div class='score'>Score: {char.stats.charisma}</div></div>", unsafe_allow_html=True)
+            st.markdown(
+                "<div class='stat-badge'><div"
+                " class='label'>Charisma</div><div"
+                f" class='mod'>{char.stats.cha_mod}</div><div"
+                f" class='score'>Score: {char.stats.charisma}</div></div>",
+                unsafe_allow_html=True,
+            )
 
         # Tabbed Lore & Gear
-        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+        st.markdown(
+            "<div style='height: 16px;'></div>", unsafe_allow_html=True
+        )
         tab_lore, tab_flaw, tab_gear = st.tabs([
-    "ᚨ Chronicled Lore",
-    "ᛈ Secret & Flaw",
-    "ᚠ Traveling Gear",
-])
+            "ᚨ Chronicled Lore",
+            "ᛈ Secret & Flaw",
+            "ᚠ Traveling Gear",
+        ])
 
         with tab_lore:
             st.write(char.backstory_summary)
