@@ -261,7 +261,7 @@ st.markdown(
         box-shadow: 0 6px 16px rgba(0,0,0,0.5), inset 0 0 25px rgba(60, 30, 10, 0.15) !important;
     }}
 
-    /* --- GUARANTEED TAB VISIBILITY OVERRIDES --- */
+    /* High-Contrast Tab Bar Container */
     div[data-testid="stTabs"] [role="tablist"] {{
         background: rgba(10, 20, 14, 0.95) !important;
         border: 1.5px solid rgba(212, 178, 111, 0.45) !important;
@@ -300,7 +300,7 @@ st.markdown(
 
     div[data-baseweb="tab-highlight"],
     div[data-baseweb="tab-border"] {{
-        display: none !important; /* Hide red underline */
+        display: none !important;
     }}
 
     /* Portrait Image Frame */
@@ -455,31 +455,38 @@ if generate_btn:
 
             text_response = None
             last_err = None
+            candidate_models = [
+                "gemini-3.8-flash",
+                "gemini-2.5-flash",
+                "gemini-2.0-flash",
+            ]
 
-            # Retry up to 3 times on the active Flash model with progressive backoff
-            for attempt in range(1, 4):
-                try:
-                    text_response = client.models.generate_content(
-                        model="gemini-3.8-flash",
-                        contents=(
-                            "Create a rich, flavorful level 1 D&D character"
-                            f" based on this prompt: {user_concept}"
-                        ),
-                        config={
-                            "response_mime_type": "application/json",
-                            "response_schema": DndCharacter,
-                        },
-                    )
-                    if text_response and text_response.text:
-                        break
-                except Exception as e:
-                    last_err = e
-                    time.sleep(attempt * 2)
+            for model_name in candidate_models:
+                for attempt in range(1, 3):
+                    try:
+                        text_response = client.models.generate_content(
+                            model=model_name,
+                            contents=(
+                                "Create a rich, flavorful level 1 D&D character"
+                                f" based on this prompt: {user_concept}"
+                            ),
+                            config={
+                                "response_mime_type": "application/json",
+                                "response_schema": DndCharacter,
+                            },
+                        )
+                        if text_response and text_response.text:
+                            break
+                    except Exception as e:
+                        last_err = e
+                        time.sleep(attempt * 1.5)
+                if text_response and text_response.text:
+                    break
 
             if not text_response or not text_response.text:
                 st.error(
-                    "ᛈ The Oracle was momentarily unreachable. Please wait a"
-                    f" few moments and try awakening your adventurer once more. ({last_err})"
+                    "ᛈ The Oracle was momentarily unreachable due to high demand. Please try"
+                    f" awakening your adventurer once more in a few moments. ({last_err})"
                 )
                 st.stop()
 
